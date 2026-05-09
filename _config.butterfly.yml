@@ -1,0 +1,200 @@
+# ======================================================
+# Butterfly 主题配置 - 参照 blog.xchstudy.org
+# ======================================================
+
+# ---------- 主题色（粉色二次元风格） ----------
+theme_color:
+  enable: true
+  main: "#f472b6"
+  paginator: "#ec4899"
+  button_hover: "#db2777"
+  text_selection: "#fce7f3"
+  link_color: "#f472b6"
+  meta_color: "#9ca3af"
+  hr_color: "#fbcfe8"
+  code_foreground: "#f472b6"
+  code_background: "rgba(244, 114, 182, .05)"
+  toc_color: "#ec4899"
+  blockquote_padding_color: "#f472b6"
+  blockquote_background_color: "#f472b6"
+  scrollbar_color: "#f472b6"
+  meta_theme_color_light: "ffffff"
+  meta_theme_color_dark: "#0f0a1a"
+
+# ---------- 导航菜单 ----------
+menu:
+  首页: / || fas fa-home
+  时间轴: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder-open
+  友情链接: /link/ || fas fa-user-friends
+  留言板: /message/ || fas fa-comment-dots
+
+# ---------- 代码高亮 ----------
+highlight_theme: mac
+highlight_copy: true
+highlight_lang: true
+code_word_wrap: true
+
+# ---------- 导航栏 ----------
+nav_fixed: true
+
+# ---------- 社交图标 ----------
+social:
+  fab fa-github: https://github.com/123lx-design || Github
+  fas fa-envelope: mailto:123lx-design@users.noreply.github.com || Email
+
+# ---------- 头像 ----------
+avatar:
+  url: https://cdn.jsdelivr.net/gh/123lx-design/cdn@main/sagiri-avatar.png
+  rounded: true
+
+# ---------- 侧边栏 ----------
+aside:
+  enable: true
+  position: right
+  card_author: true
+  card_announcement: true
+  card_recent_post: true
+  card_categories: false
+  card_tags: true
+  card_archives: true
+  card_webinfo: true
+
+# ---------- 公告 ----------
+card_announcement:
+  enable: true
+  content: 欢迎来到Titus的花园🌸～这里记录技术与生活的交汇，持续更新中～
+
+# ---------- 自定义注入 ----------
+inject:
+  head:
+    - <link rel="stylesheet" href="/my-blog/css/custom.css">
+  bottom:
+
+# ---------- 页脚 ----------
+footer:
+  owner:
+    enable: true
+    since: 2026
+  custom_text: <span>Titus的花园 🌸 技术 & 生活</span>
+  powered: true
+
+# ---------- 文章元信息 ----------
+post_meta:
+  page:
+    date_type: both
+    date_format: relative
+    categories: true
+    tags: true
+  post:
+    date_type: both
+    date_format: relative
+    categories: true
+    tags: true
+
+# ---------- 暗色模式 ----------
+darkmode:
+  enable: true
+  button: true
+  auto_change: true
+
+# ---------- 搜索 ----------
+algolia_search:
+  enable: false
+
+local_search:
+  enable: true
+
+# ---------- 图片懒加载 ----------
+lazyload:
+  enable: true
+
+# ---------- 页面加载动画（preloader 左右分屏） ----------
+preloader:
+  enable: true
+  # 加载动画文字
+  load_text: 加载中...
+
+# ---------- Pace 进度条（关闭，使用 preloader 替代） ----------
+pace:
+  enable: false
+
+# ---------- 文章版权 ----------
+post_copyright:
+  enable: true
+  decode: true
+  license: CC BY-NC-SA 4.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+# ---------- 网站资讯 ----------
+card_webinfo:
+  enable: true
+  post_count: true
+  last_push_date: true
+  run_time:
+    enable: true
+    create_time: "2026-05-07 00:00:00"
+
+# ---------- Pjax ----------
+pjax:
+  enable: true
+
+# ---------- 文章推荐 ----------
+related_post:
+  enable: true
+  limit: 6
+  date_type: created
+
+# ---------- 打字效果 ----------
+activate_power_mode:
+  enable: false
+
+# ---------- 阅读模式 ----------
+readmode:
+  enable: true
+
+# ---------- 自动摘要 ----------
+auto_excerpt:
+  enable: true
+  length: 150
+
+# ---------- 置顶 ----------
+sticky:
+  enable: true
+
+# ---------- 文章锚点 ----------
+anchor:
+  auto_update: true
+
+# ---------- 文章封面 ----------
+cover:
+  position: both
+  default: https://cdn.jsdelivr.net/gh/123lx-design/my-blog@gh-pages/img/butterfly-icon.png
+
+# ---------- 字体 ----------
+font:
+  global-font-size: 16px
+  code-font-size: 14px
+
+# ---------- 鼠标点击效果：烟花 ----------
+fireworks:
+  enable: true
+  zIndex: 9999
+  mobile: true
+
+# ---------- 鼠标点击效果：爱心 ----------
+click_heart:
+  enable: false
+  mobile: false
+
+# ---------- 鼠标点击效果：文字 ----------
+clickShowText:
+  enable: false
+  text:
+    # - 欢迎光临
+    # - 🌸
+    # - Titus
+  fontSize: 15px
+  random: true
+  mobile: false

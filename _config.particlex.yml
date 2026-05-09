@@ -1,0 +1,166 @@
+# ParticleX Configuration
+# https://github.com/theme-particlex/hexo-theme-particlex
+
+# Avatar image
+avatar: https://cdn.jsdelivr.net/gh/123lx-design/cdn@main/sagiri-avatar.png
+
+# Home page background image
+background:
+    - /images/background.jpg
+
+# Loading image
+loading: /images/loading.gif
+
+# Optional colors for category and tag (粉色二次元风格)
+colors:
+    - "#f472b6"
+    - "#ec4899"
+    - "#db2777"
+    - "#f9a8d4"
+    - "#fce7f3"
+
+# ParticleX theme icon is adopts the Font Awesome 6
+# https://fontawesome.com
+
+# Main menu navigation
+menu:
+    首页:
+        name: house
+        theme: solid
+        link: /
+    时间轴:
+        name: box-archive
+        theme: solid
+        link: /archives
+    标签:
+        name: tags
+        theme: solid
+        link: /tags
+    分类:
+        name: bookmark
+        theme: solid
+        link: /categories
+    友链:
+        name: user-group
+        theme: solid
+        link: /link
+    留言板:
+        name: comment-dots
+        theme: solid
+        link: /message
+
+# Side info card
+card:
+    enable: true
+    description: |
+        欢迎来到Titus的花园🌸
+        技术 × 生活，持续更新中～
+    iconLinks:
+        Github:
+            name: github
+            theme: brands
+            link: https://github.com/123lx-design
+        Email:
+            name: envelope
+            theme: solid
+            link: mailto:123lx-design@users.noreply.github.com
+    friendLinks:
+
+# Footer info
+footer:
+    since: 2026
+    # Customize the server domain name ICP
+    ICP:
+        enable: false
+        code:
+        link:
+
+# Polyfill
+# https://polyfill.io
+polyfill:
+    enable: true
+    features:
+        - default
+
+# Highlight.js
+# https://highlightjs.org
+highlight:
+    enable: true
+    style: github
+
+# KaTeX math rendering
+math:
+    enable: false
+
+# Image preview
+preview:
+    enable: true
+
+# Article encryption
+crypto:
+    enable: false
+
+# Search
+search:
+    enable: true
+
+# giscus
+# https://github.com/giscus/giscus
+giscus:
+    enable: false
+    src: https://giscus.app/client.js
+    repo:
+    repoID:
+    category:
+    categoryID:
+    mapping: pathname
+    strict: 0
+    reactionsEnabled: 1
+    emitMetadata: 0
+    inputPosition: bottom
+    theme: preferred_color_scheme
+    lang:
+
+# Gitalk
+# https://github.com/gitalk/gitalk
+gitalk:
+    enable: false
+    clientID:
+    clientSecret:
+    repo:
+    owner:
+    admin:
+    language: zh-CN
+    proxy:
+
+# Waline
+# https://github.com/walinejs/waline
+waline:
+    enable: false
+    serverURL:
+    locale:
+    commentCount: true
+    pageview: false
+    emoji:
+        - https://unpkg.com/@waline/emojis@1.2.0/weibo
+        - https://unpkg.com/@waline/emojis@1.2.0/bilibili
+        - https://unpkg.com/@waline/emojis@1.2.0/qq
+    meta:
+        - nick
+        - mail
+        - link
+    requiredMeta:
+        - nick
+    lang: zh-CN
+    wordLimit: 0
+    login: enable
+    pageSize: 10
+
+# Twikoo
+# https://github.com/imaegoo/twikoo
+twikoo:
+    enable: false
+    envID:
+    region:
+    path: location.pathname
+    lang:

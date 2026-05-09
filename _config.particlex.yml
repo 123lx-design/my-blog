@@ -2,7 +2,7 @@
 # https://github.com/theme-particlex/hexo-theme-particlex
 
 # Avatar image
-avatar: https://cdn.jsdelivr.net/gh/123lx-design/cdn@main/sagiri-avatar.png
+avatar: /images/avatar.jpg
 
 # Home page background image
 background:

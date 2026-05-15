@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>分类 | Titus的花园</title>
+    <title>PGSCUP 2026 | 服务器取证 WriteUp | Titus的花园</title>
     <meta name="author" content="Titus" />
     <meta name="description" content="个人技术博客" />
     <meta name="keywords" content="技术,取证,安全" />
@@ -37,6 +37,10 @@
 
 
 <script src="/my-blog/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -234,14 +238,20 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
+            <div class="article">
+    <div>
+        <h1>PGSCUP 2026 | 服务器取证 WriteUp</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/5/15
+        </span>
         
-        
-        
-        <span>
-            <a href="/my-blog/categories/WriteUp/" style="background: #ec4899">
+        <span class="category">
+            <a href="/my-blog/categories/WriteUp/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
@@ -250,18 +260,231 @@
         </span>
         
         
-        
-        <span>
-            <a href="/my-blog/categories/WriteUp/%E7%94%B5%E5%AD%90%E5%8F%96%E8%AF%81/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                电子取证
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/my-blog/tags/PGSCUP/" style="color: #ec4899">
+                    PGSCUP
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/my-blog/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%96%E8%AF%81/" style="color: #ffa2c4">
+                    服务器取证
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/my-blog/tags/PVE/" style="color: #ec4899">
+                    PVE
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/my-blog/tags/Ceph/" style="color: #db2777">
+                    Ceph
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/my-blog/tags/MySQL/" style="color: #ffa2c4">
+                    MySQL
+                </a>
+            </span>
+            
         </span>
         
-        
     </div>
+    
+    <div class="content" v-pre>
+        <blockquote>
+<p><strong>检材：</strong> 三节点 PVE 集群镜像 + VM100（金麟资本理财平台）<br><strong>分析时间：</strong> 2026-05-10</p>
+</blockquote>
+<p>本文为 PGSCUP 2026 服务器取证赛道完整解题记录，共 30 题。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="Q1-—-PVE-主机版本号"><a href="#Q1-—-PVE-主机版本号" class="headerlink" title="Q1 — PVE 主机版本号"></a>Q1 — PVE 主机版本号</h2><p><strong><code>9.1.1</code></strong></p>
+<p>三节点都跑 <code>pveversion</code>，输出一致。</p>
+<hr>
+<h2 id="Q2-—-PVE-主机内核版本"><a href="#Q2-—-PVE-主机内核版本" class="headerlink" title="Q2 — PVE 主机内核版本"></a>Q2 — PVE 主机内核版本</h2><p><strong><code>6.17.2-1-pve</code></strong></p>
+<p><code>uname -r</code> 或者看 <code>anaconda-ks.cfg</code>。</p>
+<hr>
+<h2 id="Q3-—-PVE-集群名"><a href="#Q3-—-PVE-集群名" class="headerlink" title="Q3 — PVE 集群名"></a>Q3 — PVE 集群名</h2><p><strong><code>pgscup2026</code></strong></p>
+<p><code>/etc/corosync/corosync.conf</code> 和 <code>pvecm status</code> 都有。</p>
+<hr>
+<h2 id="Q4-—-加入集群指纹前-6-位"><a href="#Q4-—-加入集群指纹前-6-位" class="headerlink" title="Q4 — 加入集群指纹前 6 位"></a>Q4 — 加入集群指纹前 6 位</h2><p><strong><code>20:76:ac</code></strong></p>
+<pre><code class="language-bash">ssh-keygen -lE md5 -f /etc/ssh/ssh_host_ecdsa_key.pub
+# 256 MD5:20:76:ac:89:e5:b9:9c:b0:61:29:ff:fc:2c:7d:c7:f3
+</code></pre>
+<hr>
+<h2 id="Q5-—-时间服务器"><a href="#Q5-—-时间服务器" class="headerlink" title="Q5 — 时间服务器"></a>Q5 — 时间服务器</h2><p><strong><code>ntp.aliyun.com</code></strong></p>
+<p><code>/etc/chrony/chrony.conf</code> 和 <code>timesyncd.conf</code> 都指向阿里云。</p>
+<hr>
+<h2 id="Q6-—-Ceph-资源池名"><a href="#Q6-—-Ceph-资源池名" class="headerlink" title="Q6 — Ceph 资源池名"></a>Q6 — Ceph 资源池名</h2><p><strong><code>Ceph_pgscup_pool</code></strong></p>
+<p>看 <code>/etc/pve/storage.cfg</code>：</p>
+<pre><code>rbd: Ceph_pgscup_pool
+    content rootdir,images
+    pool Ceph_pgscup_pool
+</code></pre>
+<hr>
+<h2 id="Q7-—-Ceph-资源池类别"><a href="#Q7-—-Ceph-资源池类别" class="headerlink" title="Q7 — Ceph 资源池类别"></a>Q7 — Ceph 资源池类别</h2><p><strong><code>RBD</code></strong></p>
+<p><code>pvesm status</code> 看 Type 列。</p>
+<hr>
+<h2 id="Q8-—-Ceph-集群-ID-前-8-位"><a href="#Q8-—-Ceph-集群-ID-前-8-位" class="headerlink" title="Q8 — Ceph 集群 ID 前 8 位"></a>Q8 — Ceph 集群 ID 前 8 位</h2><p><strong><code>3f28d8bb</code></strong></p>
+<p><code>/etc/ceph/ceph.conf</code> 里 <code>fsid</code> 的前 8 位。</p>
+<hr>
+<h2 id="Q9-—-Ceph-最小副本数"><a href="#Q9-—-Ceph-最小副本数" class="headerlink" title="Q9 — Ceph 最小副本数"></a>Q9 — Ceph 最小副本数</h2><p><strong><code>2</code></strong></p>
+<p><code>/etc/ceph/ceph.conf</code>：</p>
+<pre><code>osd_pool_default_min_size = 2
+osd_pool_default_size = 3
+</code></pre>
+<hr>
+<h2 id="Q10-—-虚拟机快照创建时间"><a href="#Q10-—-虚拟机快照创建时间" class="headerlink" title="Q10 — 虚拟机快照创建时间"></a>Q10 — 虚拟机快照创建时间</h2><p><strong><code>2026-04-16-15:05:19</code></strong></p>
+<p>VM 100 配置里 <code>snaptime: 1776323119</code>，转 CST：</p>
+<pre><code class="language-bash">date -d @1776323119 &#39;+%Y-%m-%d-%H:%M:%S&#39;
+</code></pre>
+<hr>
+<h2 id="Q11-—-VM-服务器内核版本"><a href="#Q11-—-VM-服务器内核版本" class="headerlink" title="Q11 — VM 服务器内核版本"></a>Q11 — VM 服务器内核版本</h2><p><strong><code>3.10.0-957.el7.x86_64</code></strong></p>
+<p>VM 100 没启动，所以走 RBD 只读映射挂载 <code>/boot</code> 分区：</p>
+<pre><code class="language-bash">rbd map Ceph_pgscup_pool/vm-100-disk-0 --read-only
+mount -o ro,norecovery /dev/rbd0p1 /mnt/vm100_boot
+ls /mnt/vm100_boot/vmlinuz-*
+# vmlinuz-3.10.0-957.el7.x86_64
+</code></pre>
+<hr>
+<h2 id="Q12-—-SSH-端口"><a href="#Q12-—-SSH-端口" class="headerlink" title="Q12 — SSH 端口"></a>Q12 — SSH 端口</h2><p><strong><code>22</code></strong></p>
+<p><code>/etc/ssh/sshd_config</code> → <code>Port 22</code>，systemd socket 也写死 <code>ListenStream=22</code>。</p>
+<hr>
+<h2 id="Q13-—-网卡-IP"><a href="#Q13-—-网卡-IP" class="headerlink" title="Q13 — 网卡 IP"></a>Q13 — 网卡 IP</h2><p><strong><code>192.168.0.70</code></strong></p>
+<p><code>/etc/sysconfig/network-scripts/ifcfg-eth0</code>：</p>
+<pre><code>IPADDR=&quot;192.168.0.70&quot;
+PREFIX=&quot;24&quot;
+GATEWAY=&quot;192.168.0.1&quot;
+</code></pre>
+<hr>
+<h2 id="Q14-—-金麟资本域名"><a href="#Q14-—-金麟资本域名" class="headerlink" title="Q14 — 金麟资本域名"></a>Q14 — 金麟资本域名</h2><p><strong><code>jlzb.vip</code></strong></p>
+<p><code>/etc/nginx/conf.d/jinqin.conf</code>：</p>
+<pre><code class="language-nginx">server_name jlzb.vip;
+root /var/www/html/public;
+</code></pre>
+<p>jinqin &#x3D; 金麟拼音，jlzb &#x3D; 金麟资本缩写。</p>
+<hr>
+<h2 id="Q15-—-加密工具名称"><a href="#Q15-—-加密工具名称" class="headerlink" title="Q15 — 加密工具名称"></a>Q15 — 加密工具名称</h2><p><strong><code>encrypt_tool.py</code></strong></p>
+<p>位置：<code>/root/encrypt_tool.py</code><br>外层是 POSIX shell 自解压脚本，gzip 解压后是 Python 源码。<br><code>.viminfo</code> 里有编辑记录。</p>
+<hr>
+<h2 id="Q16-—-加密工具备份密码"><a href="#Q16-—-加密工具备份密码" class="headerlink" title="Q16 — 加密工具备份密码"></a>Q16 — 加密工具备份密码</h2><p><strong><code>JDSJ2026@Backup</code></strong></p>
+<p>payload 里写死：</p>
+<pre><code class="language-python">password = &#39;JDSJ2026@Backup&#39;
+openssl aes-256-cbc -salt -pass pass:JDSJ2026@Backup
+</code></pre>
+<hr>
+<h2 id="Q17-—-XOR-密钥"><a href="#Q17-—-XOR-密钥" class="headerlink" title="Q17 — XOR 密钥"></a>Q17 — XOR 密钥</h2><p><strong><code>0x5A</code></strong></p>
+<pre><code class="language-python">XOR_KEY = 0x5A
+ord(c) ^ (XOR_KEY + i) % 256
+</code></pre>
+<hr>
+<h2 id="Q18-—-MySQL-root-密码"><a href="#Q18-—-MySQL-root-密码" class="headerlink" title="Q18 — MySQL root 密码"></a>Q18 — MySQL root 密码</h2><p><strong><code>pgscup@o26</code></strong></p>
+<p>三处都能看到：<code>encrypt_tool.py</code> 里 <code>mysqldump</code> 命令、<code>/tmp/backup_db.sh</code>、<code>/tmp/import_data.py</code>。</p>
+<hr>
+<h2 id="Q19-—-聊天记录数据表名"><a href="#Q19-—-聊天记录数据表名" class="headerlink" title="Q19 — 聊天记录数据表名"></a>Q19 — 聊天记录数据表名</h2><p><strong><code>user_chat</code></strong></p>
+<pre><code class="language-sql">CREATE TABLE `user_chat` (
+  `from_user_id`, `to_user_id`, `content`,
+  `offline`, `type`, `add_time`
+)
+</code></pre>
+<p>Model 文件 <code>app/UserChat.php</code> 也是 <code>protected $table = &#39;user_chat&#39;</code>。</p>
+<hr>
+<h2 id="Q20-—-type-0-密码盐值"><a href="#Q20-—-type-0-密码盐值" class="headerlink" title="Q20 — type&#x3D;0 密码盐值"></a>Q20 — type&#x3D;0 密码盐值</h2><p><strong><code>ABCDEFG</code></strong></p>
+<p><code>app/Users.php</code>：</p>
+<pre><code class="language-php">if ($type == 0) {
+    $salt = &#39;ABCDEFG&#39;;
+    foreach (str_split($password) as $char) {
+        $salt .= md5($char);
+    }
+}
+return md5($salt);
+</code></pre>
+<p>验证：<code>MakePassword(&#39;www9nwcc&#39;)</code> 的结果和数据库里存的一致。</p>
+<hr>
+<h2 id="Q21-—-Laravel-APP-KEY-后-8-位"><a href="#Q21-—-Laravel-APP-KEY-后-8-位" class="headerlink" title="Q21 — Laravel APP_KEY 后 8 位"></a>Q21 — Laravel APP_KEY 后 8 位</h2><p><strong><code>sJ2LPg28</code></strong></p>
+<p><code>/tmp/licai/.env</code>：</p>
+<pre><code>APP_KEY=base64:puS70d5BEDqnBMNFa2WBtxRfFyEybPtVv/rsJ2LPg28=
+</code></pre>
+<p>去掉 <code>base64:</code> 前缀和 <code>=</code> padding，取末尾 8 位。</p>
+<hr>
+<h2 id="Q22-—-后台机器人数量"><a href="#Q22-—-后台机器人数量" class="headerlink" title="Q22 — 后台机器人数量"></a>Q22 — 后台机器人数量</h2><p><strong><code>3</code></strong></p>
+<p><code>robot</code> 表里面 <code>(9,...),(10,...),(11,...)</code> 三条。<code>legal_robot</code> 是另一个表，不算。</p>
+<hr>
+<h2 id="Q23-—-聊天记录总数"><a href="#Q23-—-聊天记录总数" class="headerlink" title="Q23 — 聊天记录总数"></a>Q23 — 聊天记录总数</h2><p><strong><code>11494</code></strong></p>
+<p><code>jinqin_backup.sql</code> 里 <code>user_chat</code> 表精确计数，id 从 1 到 11494 连续。</p>
+<hr>
+<h2 id="Q24-—-注册用户总数"><a href="#Q24-—-注册用户总数" class="headerlink" title="Q24 — 注册用户总数"></a>Q24 — 注册用户总数</h2><p><strong><code>21722</code></strong></p>
+<p><code>users</code> 表，id 1~21722，连续无缺口。</p>
+<hr>
+<h2 id="Q25-—-季丽华身份证号"><a href="#Q25-—-季丽华身份证号" class="headerlink" title="Q25 — 季丽华身份证号"></a>Q25 — 季丽华身份证号</h2><p><strong><code>370100196901274436</code></strong></p>
+<p>在 <code>user_real</code> 表里：<code>(21826,21702,&#39;季丽华&#39;,&#39;370100196901274436&#39;,...)</code></p>
+<hr>
+<h2 id="Q26-—-钱包流水金额第二大用户"><a href="#Q26-—-钱包流水金额第二大用户" class="headerlink" title="Q26 — 钱包流水金额第二大用户"></a>Q26 — 钱包流水金额第二大用户</h2><p><strong><code>平玉珍</code></strong></p>
+<p><code>wallet_log</code> 表按 <code>user_id</code> 汇总 <code>change</code> 绝对值：</p>
+<table>
+<thead>
+<tr>
+<th>用户</th>
+<th>金额</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>马旭</td>
+<td>29752.00</td>
+</tr>
+<tr>
+<td><strong>平玉珍</strong></td>
+<td><strong>28856.00</strong></td>
+</tr>
+<tr>
+<td>吴俊</td>
+<td>28594.00</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="Q27-—-法币交易最多卖家笔数"><a href="#Q27-—-法币交易最多卖家笔数" class="headerlink" title="Q27 — 法币交易最多卖家笔数"></a>Q27 — 法币交易最多卖家笔数</h2><p><strong><code>1727</code></strong></p>
+<p><code>legal_deal</code> 表按 <code>seller_id</code> 分组：</p>
+<pre><code>seller_id=24  1727 笔
+seller_id=37  1695 笔
+seller_id=67  1695 笔
+</code></pre>
+<hr>
+<h2 id="Q28-—-已完成结算杠杆交易保证金最多"><a href="#Q28-—-已完成结算杠杆交易保证金最多" class="headerlink" title="Q28 — 已完成结算杠杆交易保证金最多"></a>Q28 — 已完成结算杠杆交易保证金最多</h2><p><strong><code>37240.76</code></strong></p>
+<p><code>lever_transaction</code> 表，取 <code>status=3</code>（已平仓），按 <code>user_id</code> 汇总 <code>origin_caution_money</code>：</p>
+<pre><code>贺伟 (10423)  37240.76
+孙辉 (4650)   36901.28
+陆鹏 (7396)   36506.18
+</code></pre>
+<p><code>settled</code> 字段全为 0，这里用 <code>status=3</code> 对应「已完成结算」。</p>
+<hr>
+<h2 id="Q29-—-余额最小商家手机号"><a href="#Q29-—-余额最小商家手机号" class="headerlink" title="Q29 — 余额最小商家手机号"></a>Q29 — 余额最小商家手机号</h2><p><strong><code>15860623709</code></strong></p>
+<p><code>seller</code> 表 <code>mobile</code> 字段，余额最低的是 <code>user_id=4</code>。</p>
+<hr>
+<h2 id="Q30-—-余额最小商家余额"><a href="#Q30-—-余额最小商家余额" class="headerlink" title="Q30 — 余额最小商家余额"></a>Q30 — 余额最小商家余额</h2><p><strong><code>8461.4</code></strong></p>
+<p>同上：<code>seller_balance = 8461.40000</code></p>
+
+    </div>
+    
+    
+    
+    
+    
+    
     
 </div>
 
@@ -293,6 +516,12 @@
         
     </div>
     <script src="/my-blog/js/main.js"></script>
+    
+    
+
+
+
+
     
 <script src="/my-blog/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":"shizuku","display":{"position":"left","width":200,"height":400,"hOffset":0,"vOffset":-20},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.9,"opacityOnHover":0.2},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script>
 <style>
